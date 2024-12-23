@@ -17,8 +17,10 @@ namespace ArticlesWeb.MVC.Utils
             UserLoginModel user,
             IMapper mapper)
         {
-            var dbUser = await manager.UserManager.FindByEmailAsync(user.Email);
-            
+            User dbUser = user.UsernameOrMail.Contains("@")
+                ? await manager.UserManager.FindByEmailAsync(user.UsernameOrMail)
+                : await manager.UserManager.FindByNameAsync(user.UsernameOrMail);
+
             if (dbUser is null)
             {
                 return new ErrorResult(Messages.WrongInput);

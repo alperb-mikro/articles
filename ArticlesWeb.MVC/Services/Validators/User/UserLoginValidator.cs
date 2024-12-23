@@ -7,11 +7,11 @@ namespace ArticlesWeb.MVC.Services.Validators.User
     {
         public UserLoginValidator()
         {
-            RuleFor(user => user.Email)
+            RuleFor(user => user.UsernameOrMail)
                 .NotEmpty()
                 .NotNull()
-                .EmailAddress()
-                .WithMessage("Please make sure email is valid");
+                .MinimumLength(3)
+                .WithMessage("Kullanıcı adı/email en az 3 karakter olmalıdır");
 
             RuleFor(user => user.Password)
                 .NotEmpty()
