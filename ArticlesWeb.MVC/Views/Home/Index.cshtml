@@ -1,0 +1,62 @@
+﻿@model List<ArticlesWeb.MVC.Models.ResponseModels.PostSimpleViewModel>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@{
+    
+    ViewData["Title"] = "Home Page";
+
+}
+
+<div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+        @{
+            if (Model.Count == 0)
+            {
+                <div class="alert alert-info">
+                    <h2>Henüz bir makale yok :( </h2>
+                </div>
+            }
+            else
+            {
+                foreach (var post in Model)
+                {
+                    <hr>
+                    <div class="post-preview">
+                        <a href="/Posts/@post.Id/Details">
+                            <h2 class="post-title">
+                                @post.Title
+                            </h2>
+                        </a>
+                        <h3 class="post-subtitle">
+                            @if (post.Text.Length > 200)
+                            {
+                                <div class="detailPost">@post.Text[0..200]</div>
+                                <a href="/Posts/Details/@post.Id" class="devamini-oku">@localizer["ReadMore"]</a>
+                            }
+                            else
+                            {
+                                @post.Text
+                            }
+                        </h3>
+                        <p class="post-meta">
+                            Posted by
+                            <a asp-controller="Users" asp-action="Details" asp-route-userId="@post.User.Id">@post.User.UserName</a>
+                            on @post.CreatedAt!.Value.ToString("d")
+                        </p>
+                        <p class="post-meta">@post.CommentCount @localizer["Comment"]</p>
+                    </div>
+                }
+            }
+        }
+    </div>
+    </div>
+
+<style>
+    .detailPost{
+        display: inline;
+        font-size: 1.5rem;
+    }
+    
+    .devamini-oku{
+        font-size: 1.5rem;
+    }
+</style>

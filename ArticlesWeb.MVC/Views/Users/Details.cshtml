@@ -1,0 +1,100 @@
+﻿@model UserViewModel
+@inject IPostService PostService
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@{
+    Layout = "_Layout2";
+
+    var userId = Model.Id;
+
+    var posts = await PostService.GetPostsByUserId(userId);
+
+
+    bool isSelfPage = false;
+
+    if (User.Identity.IsAuthenticated)
+    {
+        var currentUserId = User.Claims.GetUserId();
+        isSelfPage = currentUserId == userId;
+    }
+}
+
+
+<div>
+    <div class="row">
+        <div class="col-md-9">
+            <h1 style="color: #0c5460;">@localizer["PersonalInformation"]</h1>
+        </div>
+        <div class="col-md-3">
+            @{
+                if (isSelfPage)
+                {
+                    <div style="font-size: 30px;">
+                        <a style="color: red; font-weight: bold" asp-controller="Home" asp-action="EditProfile">@localizer["EditProfile"]</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <hr/>
+    <p>@localizer["Username"] : @Model.UserName</p>
+    <p>@localizer["Email"] : @Model.Email</p>
+    <p>@localizer["Birthday"] : @Model.BirthDate</p>
+    <p>@localizer["RegistrationDate"]: @Model.RegistrationDate</p>
+    <br />
+    
+    <br />
+    @{
+        if (!String.IsNullOrEmpty(Model.About))
+        {
+            <h2 style="color: #0c5460">@localizer["Biography"]</h2>
+            <hr/>
+            <p>@Model.About</p>
+            <br/>
+        }
+    }
+</div>
+
+<div>
+    <h2 style="color: #0c5460">@localizer["UsersArticles"]</h2>
+    @{
+        if (posts.Data.Count == 0)
+        {
+            <hr />
+            <div style="color: gray !important;" class="alert alert-info">
+                <h6>@localizer["UserDoesntHaveArticle"]</h6>
+            </div>
+        }
+        else
+        {
+            foreach (var post in posts.Data)
+            {
+                <hr>
+                <div class="post-preview">
+                    <a href="/Posts/@post.Id/Details">
+                        <h2 class="post-title">
+                            @post.Title
+                        </h2>
+                    </a>
+                    <h3 class="post-subtitle">
+                        @if (post.Text.Length > 200)
+                        {
+                            @post.Text.Substring(0, 200)
+                        <a href="/Posts/@post.Id/Details" class="devamini-oku">@localizer["ReadMore"]</a>
+                        }
+                        else
+                        {
+                            @post.Text;
+                        }
+                    </h3>
+                    <p class="post-meta">
+                        Posted by
+                        <a href="/Users/@post.UserId/Details">@post.User.UserName</a>
+                        on @post.CreatedAt!.Value.ToString("d")
+                    </p>
+                    <p class="post-meta">@post.CommentCount @localizer["Comment"]</p>
+                </div>
+            }
+        }
+    }
+</div>
+

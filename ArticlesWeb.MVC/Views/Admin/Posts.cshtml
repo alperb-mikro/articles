@@ -1,0 +1,40 @@
+﻿@using System.Globalization
+@model List<ArticlesWeb.MVC.Models.ResponseModels.PostSimpleViewModel>
+@{
+    Layout = "_LayoutAdmin";
+
+    string message = TempData.ContainsKey("Message") ? TempData["Message"] as string : null;
+}
+
+@{
+    if (!String.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-primary" role="alert">
+            @message
+        </div>
+    }
+}
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Owner Username</th>
+            <th scope="col">Owner Email</th>
+            <th scope="col">Comment Count</th>
+            <th scope="col">Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var post in Model)
+    {
+        <tr>
+            <td>@post.Title</td>
+            <td>@post.User.UserName</td>
+            <td>@post.User.Email</td>
+            <td>@post.CommentCount</td>
+            <td>@post.CreatedAt.ToString()</td>
+        </tr>
+    }
+    </tbody>
+</table>

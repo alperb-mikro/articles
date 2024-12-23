@@ -1,0 +1,55 @@
+﻿@model ArticlesWeb.MVC.Models.RequestModels.UserRegisterModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@{
+    Layout = "_Layout2";
+
+    string error = null;
+
+    if (TempData.ContainsKey("RegisterError"))
+    {
+        error = TempData["RegisterError"] as string;
+    }
+}
+
+@{
+    if (!String.IsNullOrEmpty(error))
+    {
+        <div class="alert alert-danger" role="alert">
+            @error
+        </div>
+    }
+}
+<form method="post" asp-controller="Home" asp-action="Register">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label>@localizer["Username"]</label>
+        <input asp-for="UserName" type="text" class="form-control" name="UserName" aria-describedby="emailHelp">
+    </div>
+    <div class="form-group">
+        <label>@localizer["Password"]</label>
+        <input asp-for="Password" type="password" class="form-control" name="Password">
+    </div>
+    <div class="form-group">
+        <label>@localizer["FirstName"]</label>
+        <input asp-for="FirstName" type="text" class="form-control" name="FirstName">
+    </div>
+    <div class="form-group">
+        <label>@localizer["LastName"]</label>
+        <input asp-for="LastName" type="text" class="form-control" name="LastName">
+    </div>
+    <div class="form-group">
+        <label>@localizer["Email"]</label>
+        <input asp-for="Email" type="email" class="form-control" name="Email">
+    </div>
+    <div class="form-group">
+        <label>@localizer["Birthday"]</label>
+        <input asp-for="BirthDate" type="date" class="form-control" name="BirthDate">
+    </div>
+    <div class="form-group">
+        <label>@localizer["Biography"]</label>
+        <input asp-for="About" type="text" class="form-control" name="About">
+    </div>
+
+    <button type="submit" class="btn btn-primary">@localizer["Submit"]</button>
+
+</form>

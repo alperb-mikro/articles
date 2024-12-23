@@ -1,0 +1,46 @@
+﻿@model ArticlesWeb.MVC.Models.RequestModels.UserLoginModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@{
+    Layout = "_Layout2";
+
+    string error = String.Empty;
+    string message = String.Empty;
+
+    if (TempData.ContainsKey("Error"))
+    {
+        error = TempData["Error"] as string;
+    }
+    if (TempData.ContainsKey("RegisterSuccessful"))
+    {
+        message = TempData["RegisterSuccessful"] as string;
+    }
+}
+
+@if (!String.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger" role="alert">
+        @error
+    </div>
+}
+@if (!String.IsNullOrEmpty(message))
+{
+    <div class="alert alert-success" role="alert">
+        @message
+    </div>
+}
+
+<form method="post" asp-controller="Home" asp-action="Login">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label>@localizer["Username"]</label>
+        <input asp-for="Email" type="text" class="form-control" name="Email" aria-describedby="emailHelp">
+    </div>
+    <div class="form-group">
+        <label>@localizer["Password"]</label>
+        <input asp-for="Password" type="password" class="form-control" name="Password">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">@localizer["Submit"]</button>
+    </div>
+
+</form>
